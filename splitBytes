@@ -1,0 +1,16 @@
+$folder = "C:\Users\o0300015\AppData\Local\Programs\Python\Python37\Scripts\tt\"
+$path = "C:\Users\o0300015\AppData\Local\Programs\Python\Python37\Scripts\tt\Scripts.7z"
+$readBytes= [IO.File]::ReadAllBytes($path)
+$BinaryReader = New-Object IO.BinaryReader (New-Object IO.MemoryStream (,$readBytes))
+
+
+$unit = 0x55550
+$tmpSeek = 0
+$count = [int]($readBytes.Length / $unit) - 2
+foreach($i in 0..$count){
+    $null = $BinaryReader.BaseStream.Seek($tmpSeek, [IO.SeekOrigin]::Begin)
+    $tmpBytes = $BinaryReader.ReadBytes($unit)
+    [IO.File]::WriteAllBytes($folder+$i,$tmpBytes)
+    $tmpSeek = $tmpSeek + $unit
+
+}
